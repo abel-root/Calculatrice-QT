@@ -36,29 +36,29 @@ MyCalculator::~MyCalculator()
 void MyCalculator:: addition(){
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+" + ");
-    op="+";
+    opr="+";
 }
 void MyCalculator::miultiplication(){
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+" x ");
-    op="x";
+    opr="x";
 }
 void MyCalculator::soustraction(){
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+" - ");
-    op="-";
+    opr="-";
 }
 void MyCalculator::division(){
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+" ÷ ");
-    op="÷";
+    opr="÷";
 }
 void MyCalculator::equal() {
     QString value = ui->lineEdit->text();
     value = value.simplified(); // Supprime les espaces en trop
 
-    // Expression régulière pour extraire les nombres et opérateurs
-    QRegularExpression regex("(-?\\d+|[-+x÷])"); // Capture les nombres (positifs/négatifs) et les opérateurs
+    // Expression régulière pour extraire les nombres (y compris flottants) et opérateurs
+    QRegularExpression regex("(-?\\d+(\\.\\d+)?|[-+x÷])"); // Capture les nombres flottants ou entiers, et les opérateurs
     QRegularExpressionMatchIterator matchIterator = regex.globalMatch(value);
 
     // Liste pour stocker les nombres et opérateurs
@@ -68,28 +68,36 @@ void MyCalculator::equal() {
         tokens.append(match.captured(0));
     }
 
+    // Vérifier que la liste est valide
+    if (tokens.isEmpty() || tokens.size() < 3) {
+        ui->lineEdit->setText("Erreur");
+        return;
+    }
+
     // Étape 1 : Résoudre les multiplications et divisions en priorité
     for (int i = 1; i < tokens.size() - 1; i++) {
         QString op = tokens[i];
         if (op == "x" || op == "÷") {
-            int left = tokens[i - 1].toInt();
-            int right = tokens[i + 1].toInt();
+            double left = tokens[i - 1].toDouble();
+            double right = tokens[i + 1].toDouble();
 
             // Effectuer l'opération
-            int intermediateResult;
+            double intermediateResult;
             if (op == "x") {
                 intermediateResult = left * right;
             } else { // op == "÷"
                 if (right == 0) {
                     std::cerr << "Erreur : Division par zéro !" << std::endl;
                     ui->lineEdit->setText("Erreur");
+                    state=true;
+                    opr="";
                     return;
                 }
                 intermediateResult = left / right;
             }
 
             // Remplacer le sous-calcul par son résultat dans la liste
-            tokens[i - 1] = QString::number(intermediateResult);
+            tokens[i - 1] = QString::number(intermediateResult, 'f', 10); // Formate en double
             tokens.removeAt(i);   // Supprimer l'opérateur
             tokens.removeAt(i);   // Supprimer le nombre suivant
             i--; // Reculer l'indice pour réévaluer au cas où il y a une autre priorité
@@ -97,10 +105,10 @@ void MyCalculator::equal() {
     }
 
     // Étape 2 : Résoudre les additions et soustractions
-    int result = tokens[0].toInt(); // Premier nombre
-    for (int i = 1; i < tokens.size(); i += 2) {
+    double result = tokens[0].toDouble(); // Premier nombre
+    for (int i = 1; i + 1 < tokens.size(); i += 2) {
         QString op = tokens[i];
-        int number = tokens[i + 1].toInt();
+        double number = tokens[i + 1].toDouble();
 
         if (op == "+") {
             result += number;
@@ -109,51 +117,94 @@ void MyCalculator::equal() {
         }
     }
 
-    // Afficher le résultat
+    // Afficher le résultat (limité à 10 décimales pour éviter les formats trop longs)
     ui->lineEdit->clear();
-    ui->lineEdit->setText(QString::number(result));
+    ui->lineEdit->setText(QString::number(result, 'f', 10).remove(QRegularExpression("0+$")).remove(QRegularExpression("\\.$"))); // Supprime les zéros inutiles
+    state=true;
+    opr="";
 }
+
 
 void MyCalculator::cleaning(){
     ui->lineEdit->clear();
 }
 void MyCalculator::nbr_0(){
+    if(state && opr.isEmpty()){
+        cleaning();
+        state=false;
+    }
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+"0");
 }
 void MyCalculator::nbr_1(){
+    if(state && opr.isEmpty()){
+        cleaning();
+        state=false;
+    }
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+"1");
 }
 void MyCalculator::nbr_2(){
+    if(state && opr.isEmpty()){
+        cleaning();
+        state=false;
+    }
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+"2");
 }
 void MyCalculator::nbr_3(){
+    if(state && opr.isEmpty()){
+        cleaning();
+        state=false;
+    }
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+"3");
 }
 void MyCalculator::nbr_4(){
+    if(state && opr.isEmpty()){
+        cleaning();
+        state=false;
+    }
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+"4");
 }
 void MyCalculator::nbr_5(){
+    if(state && opr.isEmpty()){
+        cleaning();
+        state=false;
+    }
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+"5");
 }
 void MyCalculator::nbr_6(){
+    if(state && opr.isEmpty()){
+        cleaning();
+        state=false;
+    }
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+"6");
 }
 void MyCalculator::nbr_7(){
+    if(state && opr.isEmpty()){
+        cleaning();
+        state=false;
+    }
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+"7");
 }
 void MyCalculator::nbr_8(){
+    if(state && opr.isEmpty()){
+        cleaning();
+        state=false;
+    }
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+"8");
 }
 void MyCalculator::nbr_9(){
+    if(state && opr.isEmpty()){
+        cleaning();
+        state=false;
+    }
     operation = ui->lineEdit->text();
     ui->lineEdit->setText(operation+"9");
 }

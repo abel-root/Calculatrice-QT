@@ -40,6 +40,7 @@ public slots:
 private:
     Ui::MyCalculator *ui;
     QString operation;
-    QString op;
+    QString opr;
+    bool state=false;
 };
 #endif // MYCALCULATOR_H
