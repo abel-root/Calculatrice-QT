@@ -1,3 +1,33 @@
+/**
+ *
+ * ==================================================================
+ *
+ *       @Author : KONAN Kouakou Abel
+ *
+ * ===================================================================
+ *
+ *      @pp : Calculator
+ *
+ * ================================================================
+ *
+ *      @version 1.0.A
+ *
+ * =================================================================
+ *
+ *  ___            ___               ___
+ *  |     /--\ |   |    |   |  |    |___
+ *  |__  /   \ |__ |__  |___|  |___ |___
+ *
+ *  =================================================================
+ *
+ *                CPP
+ *
+ *  =======================================================
+*/
+
+
+
+
 #include "mycalculator.h"
 #include "ui_mycalculator.h"
 #include <QDebug>
@@ -10,6 +40,7 @@ MyCalculator::MyCalculator(QWidget *parent)
     , ui(new Ui::MyCalculator)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Calculator");
     connect(ui->clear, &QPushButton::clicked, this, &MyCalculator::cleaning);
     connect(ui->nb_0, &QPushButton::clicked, this, &MyCalculator::nbr_0);
     connect(ui->nb_1, &QPushButton::clicked, this, &MyCalculator::nbr_1);
