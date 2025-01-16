@@ -22,3 +22,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    ../Qt/6.8.1/macos/lib/QtWidgets.framework/Versions/A/Headers/README.md
